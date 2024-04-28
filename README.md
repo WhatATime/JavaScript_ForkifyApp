@@ -1,5 +1,6 @@
-- Forkify Application
-  Programmed in JavaScript
+# Forkify Application
+
+Programmed in JavaScript
 
 Application that lets you search for recipies thanks to API
 
