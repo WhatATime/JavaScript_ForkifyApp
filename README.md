@@ -1,8 +1,8 @@
 # Forkify Application
 
-Programmed in JavaScript
+Programmed in JavaScript.
 
-Application that lets you search for recipies thanks to API
+Application that lets you search for recipies thanks to API.
 
 - Search recipies
 - Modify number of servings and therefore quantity of ingredients
