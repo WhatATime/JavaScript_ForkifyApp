@@ -1,12 +1,29 @@
+// MVC architecture
+// RECIPE VIEW module
+
+//////////////////////////////////////////////////////////
+// IMPORTS
+
 import icons from 'url:../../img/icons.svg';
 import { Fraction } from 'fractional';
 import View from './view';
 
+//////////////////////////////////////////////////////////
+// MODULE IMPLEMENTATION
+// Implementation of recipe view
+
+// Child class of VIEW class
 class RecipeView extends View {
+  // Parent element is recipe view
   _parentElement = document.querySelector('.recipe');
+  // Predefined error message
   _errorMessage = 'We could not find that receipt. Please try another one!';
   _message = '';
 
+  /**
+   * Function that returns markup string for recipe view. Data comes from VIEW class
+   * @returns HTML markup string
+   */
   _generateMarkup() {
     return `
     <figure class="recipe__fig">
@@ -72,7 +89,6 @@ class RecipeView extends View {
     <div class="recipe__ingredients">
       <h2 class="heading--2">Recipe ingredients</h2>
       <ul class="recipe__ingredient-list">
-
         ${this._data.ingredients
           .map(ing => this._generateMarkupIngredient(ing))
           .join('')}
@@ -102,31 +118,56 @@ class RecipeView extends View {
     `;
   }
 
-  // Publisher-Subscriber Pattern
-  // Publisher
-  // Needs access to subscriber
-  // Function listens to events in the view (window), then executes handler
+  /**
+   * Event listener that executes the handler function after loading or hash change event
+   * @param {function} handler Function that is executed, serves as callback function
+   */
   addHandlerRender(handler) {
+    // Listens for load or change of hash value to render recipe
     ['hashchange', 'load'].forEach(ev => window.addEventListener(ev, handler));
   }
 
+  /**
+   * Event listener that executes the handler function after clicking the update servings button
+   * @param {function} handler Function that is executed, serves as callback function
+   */
   addHandlerUpdateServings(handler) {
+    // Add event handler to parent element (event delegation)
     this._parentElement.addEventListener('click', function (e) {
+      // Get the closest button parent element (necessary if click was on icon)
+      // Here the correct button (plus or minus) is selected
       const btn = e.target.closest('.btn--update-servings');
+      // If no button clicked, but somewhere elese in parent element, do nothing
       if (!btn) return;
+      // Get the number to which servings has to be updated
+      // Calculation is made in dataset attribute within markup string
       const updateTo = +btn.dataset.updateTo;
+      // Stop reducing the servings if it would be smaller than 1
       if (updateTo > 0) handler(updateTo);
     });
   }
 
+  /**
+   * Event listener that executes the handler function after clicking the bookmarking button
+   * @param {function} handler Function that is executed, serves as callback function
+   */
   addHandlerAddBookmark(handler) {
+    // Add event handler to parent element (event delegation)
     this._parentElement.addEventListener('click', function (e) {
+      // Get the closest button parent element (necessary if click was on icon)
       const btn = e.target.closest('.btn--bookmark');
+      // If not button clicked, but somewhere elese in parent element, do nothing
       if (!btn) return;
+      // Execute handler function
       handler();
     });
   }
 
+  /**
+   * Function that generates the markup string for the single ingredients
+   * @param {Object} ing Object with ingredient information
+   * @returns HTML markup string
+   */
   _generateMarkupIngredient(ing) {
     return `
     <li class="recipe__ingredient">
